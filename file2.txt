@@ -1,0 +1,21 @@
+Question a:
+81
+Question b:
+"Mumbai (Bombay) (10500000), Seoul (9981619), São Paulo (9968485), Shanghai (9696300), Jakarta (9604900)"
+Question c:
+"Russian Federation (17075400.0)
+, Canada (9970610.0)
+, China (9572900.0)
+, United States (9363520.0)
+, Brazil (8547403.0)
+"
+Question d:
+"Angola, United Arab Emirates, Burundi, Benin, Burkina Faso, Bangladesh, Bahrain, Bahamas, Barbados, Botswana, Central African Republic, Côte d’Ivoire, Cameroon, Congo, The Democratic Republic of the, Congo, Comoros, Cape Verde, Cyprus, Djibouti, Dominica, Algeria, Fiji Islands, Gabon, Gambia, Guinea-Bissau, Equatorial Guinea, Grenada, Guyana, Jamaica, Kenya, Kiribati, Kuwait, Saint Lucia, Lesotho, Madagascar, Maldives, Mali, Malta, Mozambique, Mauritania, Mauritius, Malawi, Niger, Nigeria, Nauru, Papua New Guinea, Qatar, Rwanda, Senegal, Singapore, Solomon Islands, Sierra Leone, Somalia, Sao Tome and Principe, Suriname, Swaziland, Seychelles, Chad, Togo, Tonga, Trinidad and Tobago, Tuvalu, Tanzania, Uganda, Saint Vincent and the Grenadines, Vanuatu, Samoa, Zambia, Zimbabwe"
+Question e:
+"Belgium, Dominican Republic, Greece, Honduras, Liberia, Nicaragua, El Salvador"
+Question f:
+"Mauritius (71.0), Réunion (72.7), Tunisia (73.7), Saint Helena (76.8), Libyan Arab Jamahiriya (75.5)"
+Question g:
+"Chinese (1191843539), Hindi (405633069), Spanish (355029462), English (347077867), Arabic (233839238)"
+Question h:
+"Aruba, Angola, Anguilla, Albania, Andorra, Argentina, Armenia, American Samoa, Antigua and Barbuda, Australia, Austria, Bulgaria, Bosnia and Herzegovina, Bermuda, Bolivia, Botswana, Canada, China, Colombia, Costa Rica, Cuba, Dominica, Algeria, Eritrea, Western Sahara, Estonia, Ethiopia, Georgia, Ghana, Guinea, Gambia, Equatorial Guinea, Grenada, Guatemala, French Guiana, Guyana, Croatia, Indonesia, India, Jamaica, Kenya, Cambodia, South Korea, Liberia, Libyan Arab Jamahiriya, Saint Lucia, Sri Lanka, Lithuania, Latvia, Moldova, Macedonia, Malta, Mongolia, Mauritania, Malaysia, Namibia, New Caledonia, Nigeria, Nicaragua, Panama, Papua New Guinea, North Korea, French Polynesia, Romania, Rwanda, Saudi Arabia, Saint Helena, Somalia, Slovakia, Slovenia, Syria, Tonga, Tunisia, Tanzania, Uganda, Venezuela, Wallis and Futuna, Samoa, Yugoslavia, South Africa, Zambia"

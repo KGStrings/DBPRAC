@@ -1,3 +1,10 @@
-yuh
-yuh
-yuh
+Given the code, we had used csv (internal library) as our main file reader. Reason being that given our data, we could extract items for each field in a record (fields separated by commas in this instance). With this fact we are ensured forward  compatibility, where if a new field/column were to be added, it would not affect our current code. The only issues that may arise are that we would need to update the code if more field data were needed to be turned into information. So if a "GDP" field were added, the only requirement would be that the field would respect the structure of the record and not override a field, for example if the third column (country name) was given the label of "GDP" then we would have serious issues. Our program is structurally independent for forward changes but structurally dependent if the fields are renamed or moved.
+
+
+
+
+Duplicates in file systems used by different entities within a corporation or company and thus we will have the same redundant data in multiple files, creating confusion. Also this provides us with an issue where if the same data was altered by one entity, then the others would not have been updated causing discrepancies. We encountered this issue in the program, we resolved it by creating keys or passing through duplicates for the information we required. To combat this, database systems store the likely duplicated data into a singular repository so that everyone can access the data and if it were to be changed, everyone would be able to see it.
+
+Structural dependence, conformity of files are necessary for structurally dependent files. Every file system program must be modified so that they adhere to the structure of the application that will be using them. Our program (so long as we are only adding new fields) is structurally independent. Database systems help by changing the catalog (metadata ie data about data) ensuring programs can run without changes.
+
+Data dependence, data access changes when data storage characteristics change. The program will struggle to acquire the data it needs if the characteristics or meanings of the data is changed. In our program for instance, if we were to change the 'Percentage' field to be amount/100 then the program will have to change because we already have done the conversion. Database systems help here as well by updating the catalog as well.

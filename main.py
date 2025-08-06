@@ -1,165 +1,195 @@
 import csv
-import heapq
+
+"""
+Reads the CSV file and returns the data as a list of dictionaries.
+Uses UTF-8-SIG encoding to handle files that might have a BOM (Byte Order Mark).
+"""
+def read_csv_data(filepath):
+    try:
+        with open(filepath, 'r', encoding='utf-8-sig') as file:
+            return list(csv.DictReader(file))
+    except FileNotFoundError:
+        print(f"Error: File '{filepath}' not found.")
+        return []
+    except Exception as e:
+        print(f"Unexpected error reading file: {e}")
+        return []
+
+"""
+Question a:
+Count how many unique country names end with the letter 'a'.
+Uses a set to avoid duplicates and checks if last letter is 'a'.
+Returns a formatted string and the set of countries for reuse.
+"""
+def question_a(data):
+    countries = {row['CountryName'].strip() for row in data if row['CountryName'].strip().lower().endswith('a')}
+    return f"Question a:\n{len(countries)}", countries
+
+"""
+Question b:
+Identify the five cities with the highest population.
+For cities appearing multiple times, take the highest population value.
+Sort in descending order and return the top 5 formatted as strings.
+"""
+def question_b(data):
+    city_populations = {}
+    for row in data:
+        city = row['CityName'].strip()
+        try:
+            pop = int(row['CityPopulation'])
+            city_populations[city] = max(city_populations.get(city, 0), pop)
+        except ValueError:
+            continue
+    top_cities = sorted(city_populations.items(), key=lambda x: x[1], reverse=True)[:5]
+    formatted = [f"{city}: {pop}" for city, pop in top_cities]
+    return f"\nQuestion b:\n" + '\n'.join(formatted)
+
+"""
+Question c:
+Find the five countries with the largest landmass.
+For multiple entries of the same country, keep the maximum landmass.
+Sort and return top 5 countries formatted as strings.
+"""
+def question_c(data):
+    country_landmass = {}
+    for row in data:
+        country = row['CountryName'].strip()
+        try:
+            lm = int(row['LandMass'])
+            country_landmass[country] = max(country_landmass.get(country, 0), lm)
+        except ValueError:
+            continue
+    top_countries = sorted(country_landmass.items(), key=lambda x: x[1], reverse=True)[:5]
+    formatted = [f"{country}: {lm}" for country, lm in top_countries]
+    return f"\nQuestion c:\n" + '\n'.join(formatted)
+
+"""
+Question d:
+Count countries that became independent between 1960 and 1980 inclusive.
+Returns the count as a formatted string.
+"""
+def question_d(data):
+    countries = set()
+    for row in data:
+        try:
+            year = int(row['IndepYear'])
+            if 1960 <= year <= 1980:
+                countries.add(row['CountryName'].strip())
+        except ValueError:
+            continue
+    return f"\nQuestion d:\n{len(countries)}"
+
+"""
+Question e:
+List countries that became independent between 1830 and 1850 inclusive.
+Returns a formatted string with countries sorted alphabetically.
+"""
+def question_e(data):
+    countries = set()
+    for row in data:
+        try:
+            year = int(row['IndepYear'])
+            if 1830 <= year <= 1850:
+                countries.add(row['CountryName'].strip())
+        except ValueError:
+            continue
+    return f"\nQuestion e:\n{', '.join(sorted(countries))}"
+
+"""
+Question f:
+Find the top five African countries by highest life expectancy.
+For multiple entries, keep the maximum life expectancy.
+Returns formatted string with results.
+"""
+def question_f(data):
+    life_exp = {}
+    for row in data:
+        if row['Continent'].strip() != 'Africa':
+            continue
+        try:
+            le = float(row['LifeExpectancy'])
+            country = row['CountryName'].strip()
+            life_exp[country] = max(life_exp.get(country, 0.0), le)
+        except ValueError:
+            continue
+    top_africa = sorted(life_exp.items(), key=lambda x: x[1], reverse=True)[:5]
+    formatted = [f"{country}: {le}" for country, le in top_africa]
+    return f"\nQuestion f:\n" + '\n'.join(formatted)
+
+"""
+Question g:
+Calculate the amount of speakers per language across the globe and add it to the language
+total.
+Return the top 5 languages formatted with the number of speakers.
+"""
+def question_g(data):
+    language_speakers = {}
+    seen_pairs = set()  # Track (Language, Country) to avoid duplicates
+
+    for row in data:
+        lang = row.get('Language', '').strip()
+        country = row.get('CountryName', '').strip()
+        perc_str = row.get('Percentage', '').strip()
+        pop_str = row.get('CountryPopulation', '').strip()
+
+        if not lang or not country or not perc_str or not pop_str:
+            continue
+
+        pair = (lang, country)
+        if pair in seen_pairs:
+            continue
+        seen_pairs.add(pair)
+
+        try:
+            perc = float(perc_str) / 100
+            population = int(pop_str)
+            speakers = perc * population
+            language_speakers[lang] = language_speakers.get(lang, 0) + speakers
+        except ValueError:
+            continue
+
+    # Get top 5 languages by total speakers
+    top_5 = sorted(language_speakers.items(), key=lambda x: x[1], reverse=True)[:5]
+    formatted = [f"{lang}: {int(speakers):,}" for lang, speakers in top_5]  # formatted with commas
+    return f"\nQuestion g:\n" + '\n'.join(formatted)
 
 
-with open('file.txt','r',encoding='utf-8') as cfile:
-    csvReader=csv.DictReader(cfile)
-    heads=csvReader.fieldnames
-    rows=list(csvReader)
+"""
+Question h:
+Outputs the list of countries ending with 'a' from question a, sorted alphabetically.
+"""
+def question_h(countries_ending_with_a):
+    return f"\nQuestion h:\n{', '.join(sorted(countries_ending_with_a))}"
 
-#arrays we will use for each question where necessary
-country_nameS=[]
+"""
+Main function that reads data, runs all questions, collects results,
+and writes them to the specified output file.
+"""
+def analyze_data(input_file, output_file):
+    data = read_csv_data(input_file)
+    if not data:
+        return
 
-HighestCityPop=[]
+    results = []
 
-all_langs=[]
+    q_a_result, countries_a = question_a(data)
+    results.append(q_a_result)
+    results.append(question_b(data))
+    results.append(question_c(data))
+    results.append(question_d(data))
+    results.append(question_e(data))
+    results.append(question_f(data))
+    results.append(question_g(data))
+    results.append(question_h(countries_a))
 
-HighestCountryPop=[]
+    try:
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write('\n'.join(results))
+        print(f"Results written to '{output_file}'")
+    except Exception as e:
+        print(f"Error writing to output file: {e}")
 
-independece=[]
-
-LargestLandMass=[]
-
-IYCounter=[] #independent year counter to keep track of which countries we have already seen
-
-lifeExp=[]
-
-jist={}
-
-Top5Lang=[]
-
-#arrays we will use for each question where necessary
-
-#counters
-indepYearCounter=0
-country_counter=0
-#counters
-
-#functions for the top 5 related questions
-#Example: finding the 5 highest city population using min heap
-#(if the city we find in THIS row is greater than the lowest/minimum city in the heap
-# we replace the minimum value, as it is already not in the top 5 from what we have found.
-# Then the array will not yet sort but bring the lowest value of the array into the first positon ie HighestCityPop[0])
-def update_top_5(heap, item):
-    if len(heap) < 5:
-        heapq.heappush(heap, item)
-    elif item[0] > heap[0][0] and item not in heap:
-        heapq.heapreplace(heap, item)
-#functions for the top 5 related questions
-
-for row in rows:
-    #All the information  we will need
-    city_name=row.get('CityName')
-
-    city_pop=row.get('CityPopulation')
-
-    country_name = row.get('CountryName')
-
-    country_pop = row.get('CountryPopulation')
-
-    country_lang = row.get('Language')
-
-    percentage = row.get('Percentage')
-
-    country = (int(country_pop), country_name)
-
-    landMass=row.get('LandMass')
-    country_lifeEXP=row.get('LifeExpectancy')
-
-    country_landMass = (float(landMass), country_name)
-
-    city = (int(city_pop), city_name)
-
-    indepYear=row.get('IndepYear')
-
-    continent=row.get('Continent')
-    #All the information we will need
-
-    #answers both Questions (a) and (h)
-    if country_name in country_nameS:
-        pass
-    elif country_name not in country_nameS and country_name.endswith("a"):
-        country_nameS.append(country_name)
-        country_counter+=1
-    #Question b
-    update_top_5(HighestCityPop, city)
-
-    #repeat what we did for highest city populations and transcribe it to land mass
-    #Question c
-    update_top_5(LargestLandMass, country_landMass)
-
-    # # repeat what we did for highest city populations and transcribe it to country pop
-    # update_top_5(HighestCountryPop, country)
-
-    if indepYear == 'NULL' or indepYear is None:
-        pass
-    elif int(indepYear)>=1830 and int(indepYear)<=1850 and country_name not in independece:
-        independece.append(country_name)
-    elif int(indepYear)>=1960 and int(indepYear)<=1980 and country_name not in IYCounter:
-        indepYearCounter=indepYearCounter+1
-        IYCounter.append(country_name)
-
-    spoken={'Population':int(country_pop),
-            'Language':country_lang,
-            'Percentage':percentage,
-            'Country':country_name
-            }
-    if spoken not in all_langs:
-        all_langs.append(spoken)
-    if country_lifeEXP=="NULL" or None:
-        pass
-    else:
-        country_Life=(float(country_lifeEXP), country_name)
-    if continent=="NULL" or continent is None:
-        pass
-    else :
-        if continent == "Africa":
-            update_top_5(lifeExp, country_Life)
-
-#question g:
-#Here we used a bit of logic to find the exact amount of speakers of each language
-#As each language can be found on multiple countries
-for spoken in all_langs:
-    lang=spoken['Language']
-    percentage=float(spoken['Percentage'])/100
-    population=float(spoken['Population'])
-    country_name=spoken['Country']
-    pair=lang +'-'+country_name
-    #Key is stored in jist, if the language and country pair are already in jist,then
-    #it is ignored
-    if spoken['Language'] in jist and pair not in jist:
-        jist[spoken['Language']]+=percentage*population
-        jist[pair]=True
-        continue
-    elif spoken['Language'] not in jist:
-        jist[spoken['Language']]=percentage*population
-        jist[pair]=True
-
-for lang,total in jist.items():
-    update_top_5(Top5Lang,(total,lang))
-with open('file2.txt','w',newline='', encoding='utf-8') as file2:
-    csvWriter=csv.writer(file2)
-
-    csvWriter.writerow(["Question a:"])
-    csvWriter.writerow([str(country_counter)])
-
-    csvWriter.writerow(["Question b:"])
-    csvWriter.writerow([", ".join(f"{city} ({pop})" for pop, city in sorted(HighestCityPop)[::-1])])
-
-    csvWriter.writerow(["Question c:"])
-    csvWriter.writerow([", ".join(f"{country} ({landmass})\n" for landmass, country in sorted(LargestLandMass)[::-1])])
-
-    csvWriter.writerow(["Question d:"])
-    csvWriter.writerow([", ".join(IYCounter)])
-
-    csvWriter.writerow(["Question e:"])
-    csvWriter.writerow([", ".join(independece)])
-
-    csvWriter.writerow(["Question f:"])
-    csvWriter.writerow([", ".join(f"{country} ({pop})" for pop, country in lifeExp)])
-
-    csvWriter.writerow(["Question g:"])
-    csvWriter.writerow([", ".join(f"{lang} ({int(pop)})" for pop, lang in sorted(Top5Lang)[::-1])])
-
-    csvWriter.writerow(["Question h:"])
-    csvWriter.writerow([", ".join(country_nameS)])
+if __name__ == "__main__":
+    input_path = 'file.txt'
+    output_path = 'file2.txt'
+    analyze_data(input_path, output_path)

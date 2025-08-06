@@ -132,25 +132,26 @@ def question_g(data):
         perc_str = row.get('Percentage', '').strip()
         pop_str = row.get('CountryPopulation', '').strip()
 
+        #ensures exception handling
         if not lang or not country or not perc_str or not pop_str:
             continue
-
+        #skips if it sees a duplicate
         pair = (lang, country)
         if pair in seen_pairs:
             continue
         seen_pairs.add(pair)
-
+        
         try:
             perc = float(perc_str) / 100
             population = int(pop_str)
-            speakers = perc * population
-            language_speakers[lang] = language_speakers.get(lang, 0) + speakers
+            speakers = perc * population #calculate the amount of speakers for that country
+            language_speakers[lang] = language_speakers.get(lang, 0) + speakers #adds to total across multiple countries
         except ValueError:
             continue
 
     # Get top 5 languages by total speakers
     top_5 = sorted(language_speakers.items(), key=lambda x: x[1], reverse=True)[:5]
-    formatted = [f"{lang}: {int(speakers):,}" for lang, speakers in top_5]  # formatted with commas
+    formatted = [f"{lang}: {int(speakers):,}" for lang, speakers in top_5]  # formatted with commas so it is not just a large number
     return f"\nQuestion g:\n" + '\n'.join(formatted)
 
 
